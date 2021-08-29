@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Jeu du pendu</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<a href="index.html" class="logo"><strong>Noé</strong> <span>Developpement</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="landing.html">Moi</a></li>
+							<li><a href="landing.html">Compétences</a></li>
+							<li><a href="projets.html">Mes projets</a></li>
+							<li><a href="landing.html">Cours</a></li>
+							<li><a href="generic.html">Generic</a></li>
+							<li><a href="elements.html">Elements</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<li><a href="#" class="button primary fit">Get Started</a></li>
+							<li><a href="#" class="button fit">Log In</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Jeu du pendu</h1>
+									</header>
+									
+									<h3>Code Python associé</h3>
+													<pre><code>#Programme dans le but du TP de NSI - Aucune copie n'est tolérée !
+
+from random import *
+
+ensemble_lettres = "abcdefghijklmnopqrstuvwxyz"
+dictionnaire = ["python", "linux", "java", "script", "windows", "ordinateur", "donnees", "binaire"]
+graphismes = [
+    """
+    ---------
+     |     |
+     |
+     |
+     |
+     |
+     |""",
+    """
+    ---------
+    |     |
+    |     o
+    |
+    |
+    |
+    |""",
+    """
+    ---------
+    |     |
+    |     O
+    |    -+-
+    |
+    |
+    |""",
+    """
+    ---------
+    |     |
+    |     O
+    |   /-+-
+    |
+    |
+    |""",
+    """
+    ---------
+    |     |
+    |     O
+    |   /-+-/
+    |
+    |
+    |""",
+    """
+    ---------
+    |     |
+    |     O
+    |   /-+-/
+    |    |
+    |
+    |""",
+    """
+    ---------
+    |     |
+    |     O
+    |   /-+-/
+    |    | |
+    |
+    |"""]
+
+fautes_max = len(graphismes) - 1
+
+
+def lire_lettre(propositions):
+    #Demande une lettre à l'utilisateur en s'assurant qu'elle n'a pas déjà
+    #été proposée, puis ajoute cette lettre à la liste des lettres déjà
+    #proposées.
+
+    while True:                                 #Condition qui affirme que les chances ne sont pass épuisées sinon -> "return False"
+        lettre = input("Entrez une proposition de lettre : ")       #On demande le choix de l'utilisateur
+
+        if lettre in propositions:                                  #1ere Condition : Grace à la liste regroupant les entrée on peut controler les doublons
+            print("Cette lettre a déjà été proposée.")
+        elif lettre not in ensemble_lettres or len(lettre) != 1:    #2eme Condition : On regarde si la lettre est bien en majuscule et qu'il n'y en ait pas plusieurs
+            print("Veuillez réessayez avec uniquement 1 lettre en majuscule.")
+            print("Entrée donnée : {}".format(lettre))
+        else:                                                       #Sinon on continue !
+            break;
+
+    propositions.append(lettre)                                     #Permet d'ajouter grâce à une "class" la proprosition dans la liste
+    return lettre                                                   #On retourne la variable au programme
+
+
+def mot_avec_tirets(mot, propositions):
+
+    m = ''
+    for lettre in mot:                      #Pour la lettre dans le mot :
+        if lettre in propositions:              # Si elle est dans les propositions
+            m = m + lettre                      # On l'ajoute
+        else:                               #Sinon :
+            m = m + '-'                         #On met un tiret
+    return m
+
+
+def partie():       #Initialisation de la partie ! Si gagné la fonction renverra l'information "True" sinon elle renverra "False"
+
+    fautes = 0      #Variable permettant de controler le nombre d'erreurs
+    mot = dictionnaire[randrange(len(dictionnaire))]    #Choix aléatoire du mot
+    propositions = []                                   #Création d'une liste vierge stockant toutes les entrées
+
+    print(graphismes[fautes])                           #On afiche le graphisme correspondant au nombre de fautes
+
+    while True:                                         #Condition tant que les chances ne soient pas épuisées
+        print("Lettres déjà proposées : {}".format(propositions))
+        print("Réponse courante :", mot_avec_tirets(mot, propositions))
+
+        lettre = lire_lettre(propositions)
+
+        if lettre in mot:
+            if mot_avec_tirets(mot, propositions) == mot:
+                print("Bravo, vous avez gagné. Le mot en question était : {} ".format(mot))
+                print("Nombre de fautes :", fautes)
+                return True
+        else:
+            fautes = fautes + 1
+            print(graphismes[fautes])
+            if fautes >= fautes_max:
+                print("Vous avez échoué, le mot en question était : {}".format(mot))
+                return False
+
+
+# C'est ici que commence l'éxecution du programme, au-dessus : fonctions !
+print("Bienvenue dans le jeu du pendu développé par Noé Daniel")
+
+games = 0           #"Reset" des variables
+victoires = 0       #"Reset" des variables
+
+while True:         #Tant que les chances ne sont pas nulles
+
+    games += 1         #On rajoute une partie
+    if partie():
+        victoires += 1      #On rajoute une victoire
+
+    while True:
+
+        again_game = input("Voulez-vous continuer de jouer ? o = oui, n = non : ")
+        if (again_game == 'o') or (again_game == 'n'):
+            break;
+
+    if again_game == 'n':
+        break;
+
+print("Nombre de parties réalisées {}".format(games))
+print("Nombre de victoires {}".format(victoires))
+print("Programme développé intégralement par Noé Daniel - DCMA (Noé Daniel / AezioxDev)")
+</code></pre>
+				<style>
+					code {
+						height: 600px;
+						}
+				</style>
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="icons">
+								<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+								<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; Noé Daniel</li><li>Tous droits réservés</li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
