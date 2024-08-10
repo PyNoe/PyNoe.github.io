@@ -22,9 +22,9 @@ repository               : "pynoe/pynoe.github.io"
 author:
   # Biographic information
   avatar           : "profile.png"
-  name             : "Your Sidebar Name"
+  name             : "Noé Daniel"
   pronouns         : # example: "she/her"  
-  bio              : "Short biography for the left-hand sidebar"
+  bio              : "Etudiant en M1 ICFP de physique théorique"
   location         : "Paris"
   employer         : "Ecole Normale Supérieure"
   uri              : # URL
